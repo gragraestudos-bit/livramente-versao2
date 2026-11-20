@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Documentação das rotas da API Livramente.">
+  <title>Livramente | Documentação da API</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --roxo-escuro: #4B267A;
+      --roxo: #8654C7;
+      --roxo-claro: #F0E9F8;
+      --amarelo: #FFD45A;
+      --fundo: #F8F6FC;
+      --texto: #342448;
+      --borda: #E5DBF3;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--fundo); color: var(--texto); font-family: Arial, Helvetica, sans-serif; }
+    a { text-decoration: none; }
+
+    /* BARRA DE NAVEGAÇÃO */
+    .navbar { background: var(--roxo-escuro); padding-top: .35rem; padding-bottom: .35rem; }
+    .navbar-brand { font-weight: 800; letter-spacing: .2px; font-size: 1.05rem; }
+    .navbar-brand i { color: var(--amarelo); margin-right: 6px; }
+    .navbar .nav-link { color: #F4EFFF; font-size: .8rem; padding: .4rem .55rem; white-space: nowrap; }
+    .navbar .nav-link:hover { color: var(--amarelo); }
+
+    /* CABEÇALHO */
+    .hero {
+      background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo));
+      color: #fff;
+      text-align: center;
+      padding: 76px 20px;
+    }
+    .hero .icone-livro { color: var(--amarelo); font-size: 65px; }
+    .hero h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); font-weight: 800; }
+    .hero p { color: #F3E9FF; }
+    .hero .destaque {
+      display: inline-block;
+      border: 1px solid rgba(255, 212, 90, .7);
+      background: rgba(255, 212, 90, .13);
+      color: #FFE69B;
+      padding: 7px 15px;
+      border-radius: 30px;
+      font-size: .88rem;
+      margin-top: 10px;
+    }
+
+    /* SEÇÕES E CARTÕES */
+    main { padding-top: 48px; padding-bottom: 50px; }
+    section { scroll-margin-top: 95px; }
+    .titulo { color: var(--roxo-escuro); font-weight: 800; margin-bottom: 12px; }
+    .titulo i { color: var(--roxo); margin-right: 8px; }
+    .texto-suave { color: #756982; }
+    .route-card, .info-card {
+      background: #fff;
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(75, 38, 122, .07);
+      height: 100%;
+    }
+    .route-card { padding: 24px; transition: transform .2s, box-shadow .2s; }
+    .route-card:hover { transform: translateY(-4px); box-shadow: 0 9px 24px rgba(75, 38, 122, .13); }
+    .info-card { padding: 25px; }
+    .route-card h3 { font-size: 1.2rem; font-weight: 750; margin: 20px 0 8px; }
+    .route-card h4 { font-size: .96rem; color: var(--roxo-escuro); font-weight: 750; margin-top: 19px; }
+    .route-card ul { padding-left: 21px; margin-top: 9px; }
+    .route-card li { margin-bottom: 6px; }
+    .metodo { padding: 6px 12px; border-radius: 7px; font-size: .78rem; font-weight: 800; letter-spacing: .4px; }
+    .get { background: var(--roxo-escuro); color: #fff; }
+    .post { background: var(--amarelo); color: #382800; }
+    .put { background: var(--roxo); color: #fff; }
+    .delete { background: #B73558; color: #fff; }
+    .rota {
+      background: var(--roxo-claro);
+      color: var(--roxo-escuro);
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: .81rem;
+      overflow-wrap: anywhere;
+    }
+    .codigo-json {
+      background: #282036;
+      color: #F2E8FF;
+      border-radius: 11px;
+      padding: 16px;
+      font: .85rem/1.55 Consolas, Monaco, monospace;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 8px 0 0;
+    }
+    .etiqueta { background: #FFF2C5; color: #775100; padding: 5px 10px; border-radius: 6px; font-size: .8rem; font-weight: bold; }
+    .alerta { background: #FFF8DF; border-left: 4px solid var(--amarelo); border-radius: 8px; padding: 16px 18px; }
+    .pill-status { background: var(--roxo-claro); border-radius: 20px; padding: 5px 11px; font-size: .85rem; }
+    code { color: var(--roxo-escuro); }
+    .table thead th { background: var(--roxo-escuro); color: #fff; }
+    .table td, .table th { padding: 12px 14px; vertical-align: middle; }
+
+    /* RODAPÉ E BOTÃO DE RETORNO */
+    footer { background: var(--roxo-escuro); color: #F7F0FF; padding: 28px 15px; text-align: center; }
+    footer i { color: var(--amarelo); }
+    #voltarTopo {
+      display: none; position: fixed; bottom: 22px; right: 22px;
+      background: var(--amarelo); color: var(--roxo-escuro);
+      border: none; border-radius: 50%; width: 48px; height: 48px;
+      font-size: 21px; box-shadow: 0 5px 15px rgba(0,0,0,.2); z-index: 20;
+    }
+    #voltarTopo:hover { background: #EFC13B; }
+    @media (max-width: 575px) {
+      .hero { padding: 55px 15px; }
+      .route-card { padding: 18px; }
+      .rota { font-size: .73rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- MENU -->
+  <nav class="navbar navbar-expand-xl navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#inicio"><i class="bi bi-book-half"></i>Livramente API</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#visao-geral">Visão geral</a></li>
+          <li class="nav-item"><a class="nav-link" href="#autenticacao">Autenticação</a></li>
+          <li class="nav-item"><a class="nav-link" href="#dados-iniciais">Dados</a></li>
+          <li class="nav-item"><a class="nav-link" href="#exclusao-logica">Exclusão lógica</a></li>
+          <li class="nav-item"><a class="nav-link" href="#usuarios">Usuários</a></li>
+          <li class="nav-item"><a class="nav-link" href="#livros">Livros</a></li>
+          <li class="nav-item"><a class="nav-link" href="#emprestimos">Empréstimos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#resenhas">Resenhas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#comentarios">Comentários</a></li>
+          <li class="nav-item"><a class="nav-link" href="#curtidas">Curtidas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#favoritos">Favoritos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#estante">Estante</a></li>
+          <li class="nav-item"><a class="nav-link" href="#arquivos">Arquivos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DESTAQUE -->
+  <header class="hero" id="inicio">
+    <div class="container">
+      <i class="bi bi-book icone-livro"></i>
+      <h1 class="mt-3">Livramente</h1>
+      <p class="lead mb-2">Documentação da API RESTful</p>
+      <p class="mb-0">Sua biblioteca, suas leituras, suas histórias.</p>
+      <span class="destaque"><i class="bi bi-journal-bookmark-fill"></i> Ana Fargoni, Grazielly Tonelli e Sophia Silva</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- VISÃO GERAL -->
+    <section id="visao-geral" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-info-circle"></i>Visão geral</h2>
+      <p class="texto-suave">O Livramente é uma aplicação de biblioteca com funcionalidades de organização de leituras. Esta documentação apresenta todas as rotas da API, organizadas por módulo.</p>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-hdd-network" style="color:#8654C7"></i> Endereço base</h3>
+          <p class="mb-2">Durante o desenvolvimento local:</p>
+          <pre class="codigo-json">http://localhost:3000</pre>
+        </div></div>
+        <div class="col-md-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-hdd-network" style="color:#8654C7"></i> Banco de Dados</h3>
+          <p class="mb-2">Para visualizar o Banco de Dados:</p>
+          <pre class="codigo-json">http://localhost:8081</pre>
+        </div></div>
+        <div class="col-md-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-braces" style="color:#8654C7"></i> Formato dos dados</h3>
+          <p class="mb-2">As requisições com corpo utilizam:</p>
+          <pre class="codigo-json">Content-Type: application/json</pre>
+        </div></div>
+        <div class="col-md-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-shield-lock" style="color:#8654C7"></i> Autenticação</h3>
+          <p class="mb-2">Rotas protegidas exigem o token do login:</p>
+          <pre class="codigo-json">Authorization: Bearer &lt;token&gt;</pre>
+        </div></div>
+      </div>
+    </section>
+
+    <section id="autenticacao" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-shield-lock"></i>Autenticação</h2>
+      <p class="texto-suave">O login devolve um token JWT (válido por 2 horas). Nas rotas que exigem token, envie o cabeçalho <code>Authorization: Bearer &lt;token&gt;</code>. Sem token ou com token expirado a resposta é <code>401</code>; rotas de administrador respondem <code>403</code> para usuários comuns. Nos dados iniciais, Ana Fargoni (ID 1) é a administradora.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/autenticacao/login</span>
+          </div>
+          <h3>Fazer login</h3>
+          <p>Confere e-mail e senha e devolve o token e os dados do usuário.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>email</code>: e-mail cadastrado.</li>
+            <li><code>senha</code>: senha do usuário.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li><code>email e senha</code>: textos obrigatórios e não vazios (senão 400).</li>
+            <li>O e-mail é comparado sem espaços nas pontas e em minúsculas.</li>
+            <li>E-mail inexistente e senha errada dão a mesma resposta 401, para não revelar quais e-mails existem.</li>
+            <li>O token expira em 2 horas e a resposta nunca traz a senha.</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;email&quot;: &quot;ana.fargoni@gmail.com&quot;,
+  &quot;senha&quot;: &quot;&lt;senha cadastrada&gt;&quot;
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Login realizado, com <code>token</code> e <code>usuario</code>.</li>
+            <li><span class="etiqueta">400</span> E-mail ou senha não informados.</li>
+            <li><span class="etiqueta">401</span> E-mail ou senha inválidos.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/autenticacao/me</span>
+          </div>
+          <h3>Consultar usuário logado</h3>
+          <p>Retorna os dados do dono do token.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Os dados vêm do banco no momento da consulta.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Objeto <code>usuario</code> (id, nome, e-mail, administrador).</li>
+            <li><span class="etiqueta">401</span> Token ausente, inválido ou expirado.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <!-- REGISTROS EXISTENTES NO SQL INICIAL -->
+    <section id="dados-iniciais" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-database-check"></i>Dados iniciais cadastrados</h2>
+      <p class="texto-suave">Estes são os registros definidos pelos comandos <code>INSERT</code> do banco de dados enviado com o projeto. Os exemplos das rotas abaixo utilizam esses <strong>IDs, títulos e associações reais da carga inicial</strong>, e não nomes inventados.</p>
+      <div class="alerta mb-4">
+        <strong><i class="bi bi-info-circle"></i> Importante sobre os testes</strong>
+        <p class="mb-0 mt-2">Os registros abaixo representam o <strong>estado inicial previsto no SQL</strong>. Se você já executou POST, PUT ou DELETE no Postman, o estado atual do seu PostgreSQL pode ser diferente. Os horários de <code>data_adicao</code> são gerados automaticamente e, por isso, aparecem como marcadores nos exemplos.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-people" style="color:#8654C7"></i> Usuários iniciais</h3>
+          <div class="table-responsive"><table class="table table-sm table-hover"><thead><tr><th>ID</th><th>Nome</th></tr></thead><tbody>
+            <tr><td>1</td><td>Ana Fargoni</td></tr>
+            <tr><td>2</td><td>Grazi Tonelli</td></tr>
+            <tr><td>3</td><td>Sophia Silva</td></tr>
+            <tr><td>4</td><td>Guilherme Batista</td></tr>
+            <tr><td>5</td><td>Ester Piscioneri</td></tr>
+            <tr><td>6</td><td>Bárbara Thomé</td></tr>
+          </tbody></table></div>
+        </div></div>
+        <div class="col-lg-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-book" style="color:#8654C7"></i> Livros iniciais</h3>
+          <div class="table-responsive"><table class="table table-sm table-hover"><thead><tr><th>ID</th><th>Título</th></tr></thead><tbody>
+            <tr><td>1</td><td>Dom Casmurro</td></tr>
+            <tr><td>2</td><td>O Cortiço</td></tr>
+            <tr><td>3</td><td>Memórias Póstumas de Brás Cubas</td></tr>
+            <tr><td>4</td><td>A Moreninha</td></tr>
+            <tr><td>5</td><td>O Alienista</td></tr>
+          </tbody></table></div>
+        </div></div>
+        <div class="col-12"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-journal-bookmark" style="color:#8654C7"></i> Associações iniciais da ESTANTE</h3>
+          <div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>ID usuário</th><th>Usuário</th><th>ID livro</th><th>Livro</th><th>Categoria</th></tr></thead><tbody>
+            <tr><td>2</td><td>Grazi Tonelli</td><td>1</td><td>Dom Casmurro</td><td><code>ja_li</code></td></tr>
+            <tr><td>2</td><td>Grazi Tonelli</td><td>3</td><td>Memórias Póstumas de Brás Cubas</td><td><code>quero_ler</code></td></tr>
+            <tr><td>3</td><td>Sophia Silva</td><td>2</td><td>O Cortiço</td><td><code>ja_li</code></td></tr>
+            <tr><td>4</td><td>Guilherme Batista</td><td>5</td><td>O Alienista</td><td><code>lendo</code></td></tr>
+            <tr><td>5</td><td>Ester Piscioneri</td><td>1</td><td>Dom Casmurro</td><td><code>quero_ler</code></td></tr>
+          </tbody></table></div>
+        </div></div>
+      </div>
+    </section>
+    <section id="exclusao-logica" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-trash3"></i>Exclusão lógica (soft delete)</h2>
+      <p class="texto-suave">Nenhum registro das entidades principais é apagado fisicamente. Ao excluir, o sistema apenas marca a coluna booleana <code>removido = TRUE</code>, e todas as consultas (GET, validações e verificações de unicidade) passam a ignorar os registros removidos. Isso preserva o histórico e a integridade referencial.</p>
+      <div class="row g-4">
+        <div class="col-lg-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-table" style="color:#8654C7"></i> Entidades com <code>removido</code></h3>
+          <ul>
+            <li><code>usuario</code>, <code>livro</code>, <code>emprestimo</code></li>
+            <li><code>resenha</code>, <code>comentario</code>, <code>curtida</code></li>
+            <li><code>favorito</code>, <code>estante</code></li>
+            <li>A tabela <code>arquivo</code> é a exceção: continua sendo removida fisicamente quando fica órfã.</li>
+          </ul>
+        </div></div>
+        <div class="col-lg-6"><div class="info-card">
+          <h3 class="h5 fw-bold"><i class="bi bi-shield-check" style="color:#8654C7"></i> Comportamento</h3>
+          <ul>
+            <li>As rotas <span class="metodo delete">DELETE</span> marcam <code>removido = TRUE</code> em vez de apagar.</li>
+            <li>Índices únicos (e-mail, ISBN, resenha por livro) passam a valer apenas entre os registros ativos, permitindo reaproveitar valores de itens removidos.</li>
+            <li>Em curtida, favorito e estante, adicionar de novo um item antes removido o reativa automaticamente.</li>
+          </ul>
+        </div></div>
+      </div>
+      <div class="alerta mt-3">
+        <strong><i class="bi bi-arrow-repeat"></i> Mudanças de endpoints nesta entrega</strong>
+        <ul class="mb-0 mt-2">
+          <li><span class="metodo post">POST</span> <code>/arquivos</code> passou a ser <strong>público</strong>, para permitir o cadastro de usuário com foto de perfil sem exigir login prévio.</li>
+          <li><span class="metodo delete">DELETE</span> <code>/arquivos/orfaos</code> (apenas administradores): remove imagens sem referência (faxina de arquivos órfãos).</li>
+          <li><span class="metodo get">GET</span> <code>/resenha/livro/:id</code>: lista as resenhas ativas de um livro específico.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="usuarios" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-people"></i>Usuários</h2>
+      <p class="texto-suave">Cadastro, consulta e manutenção de contas. O cadastro é público e cria sempre um usuário comum.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/usuario</span>
+          </div>
+          <h3>Listar usuários</h3>
+          <p>Lista todos os usuários, com e-mail e perfil.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Somente administrador</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Exige usuário administrador (senão 403).</li>
+            <li>A lista é ordenada pelo ID.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de usuários.</li>
+            <li><span class="etiqueta">401</span> Sem token.</li>
+            <li><span class="etiqueta">403</span> Não é administrador.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/usuario/:id</span>
+          </div>
+          <h3>Consultar usuário por ID</h3>
+          <p>Retorna dados básicos: nome, foto e data de cadastro (sem e-mail).</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do usuário.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>O usuário deve existir (senão 404).</li>
+            <li>Não retorna e-mail, senha nem o campo administrador.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Usuário encontrado.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Usuário não encontrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/usuario</span>
+          </div>
+          <h3>Cadastrar usuário</h3>
+          <p>Cria uma conta de usuário comum.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>nome</code>: nome do usuário.</li>
+            <li><code>email</code>: e-mail válido e único.</li>
+            <li><code>senha</code>: de 6 a 72 caracteres.</li>
+            <li><code>foto_perfil</code> (opcional): texto com caminho da foto.</li>
+            <li><code>id_foto_perfil</code> (opcional): ID de um arquivo enviado em <code>/arquivos</code>.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Rota aberta, sem token.</li>
+            <li><code>nome</code>: obrigatório, não vazio nem só espaços, até 100 caracteres.</li>
+            <li><code>email</code>: obrigatório, formato válido (algo@dominio.ext, sem espaços), até 150 caracteres; é salvo em minúsculas e não pode já estar cadastrado (409).</li>
+            <li>No banco, o e-mail aceita só letras, números e os símbolos . _ % + - antes do @, e domínio com extensão de 2 ou mais letras.</li>
+            <li><code>senha</code>: texto de 6 a 72 caracteres (limite do bcrypt, medido em bytes); é salva apenas como hash.</li>
+            <li><code>foto_perfil</code>: até 255 caracteres; vazio ou null significa sem foto.</li>
+            <li><code>id_foto_perfil</code>: inteiro maior que zero de um arquivo já enviado em /arquivos; arquivo inexistente gera 400.</li>
+            <li>O usuário criado é sempre comum: o cliente não define administrador.</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;nome&quot;: &quot;Maria Souza&quot;,
+  &quot;email&quot;: &quot;maria@email.com&quot;,
+  &quot;senha&quot;: &quot;123456&quot;
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Usuário criado.</li>
+            <li><span class="etiqueta">400</span> Dado inválido (nome, e-mail, senha ou foto).</li>
+            <li><span class="etiqueta">409</span> E-mail já cadastrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/usuario/:id</span>
+          </div>
+          <h3>Editar usuário</h3>
+          <p>Altera nome, e-mail e foto. Cada usuário edita somente a si mesmo; as fotos não enviadas são mantidas.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do usuário.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>nome</code>: novo nome.</li>
+            <li><code>email</code>: novo e-mail.</li>
+            <li><code>foto_perfil</code> (opcional): texto ou <code>null</code>.</li>
+            <li><code>id_foto_perfil</code> (opcional): ID do arquivo ou <code>null</code> para remover.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Só é possível editar o próprio usuário (senão 403).</li>
+            <li>O usuário deve existir (senão 404).</li>
+            <li><code>nome e email</code>: obrigatórios, com as mesmas regras do cadastro; o e-mail não pode pertencer a outro usuário (409).</li>
+            <li><code>foto_perfil e id_foto_perfil</code>: se omitidos, mantêm o valor atual; null ou vazio remove; valor inválido gera 400.</li>
+            <li>Não altera senha nem administrador.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Usuário atualizado.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">403</span> O ID não é o seu.</li>
+            <li><span class="etiqueta">404</span> Usuário não encontrado.</li>
+            <li><span class="etiqueta">409</span> E-mail já usado por outro usuário.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/usuario/:id</span>
+          </div>
+          <h3>Excluir usuário</h3>
+          <p>Exclui a própria conta, desde que não existam empréstimos, resenhas, comentários, curtidas, favoritos ou itens na estante.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do usuário.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Só é possível excluir a própria conta (senão 403).</li>
+            <li>Bloqueada se houver registros do usuário em empréstimos, resenhas, comentários, curtidas, favoritos ou estante (409).</li>
+            <li>O usuário deve existir (senão 404).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Usuário excluído.</li>
+            <li><span class="etiqueta">403</span> O ID não é o seu.</li>
+            <li><span class="etiqueta">409</span> Existem registros relacionados.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="livros" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-book"></i>Livros</h2>
+      <p class="texto-suave">Consulta pública do acervo. Cadastro, edição e exclusão são exclusivos de administradores.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/livro</span>
+          </div>
+          <h3>Listar livros</h3>
+          <p>Retorna todos os livros do acervo.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Retorna lista vazia se não houver livros.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de livros.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/livro/:id</span>
+          </div>
+          <h3>Consultar livro por ID</h3>
+          <p>Retorna um livro, com exemplares totais e disponíveis.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do livro.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>O livro deve existir (senão 404).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Livro encontrado.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/livro</span>
+          </div>
+          <h3>Cadastrar livro</h3>
+          <p>Cria o livro com todos os exemplares disponíveis.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Somente administrador</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>titulo</code>: título.</li>
+            <li><code>autor</code>: autor.</li>
+            <li><code>genero</code>: gênero.</li>
+            <li><code>quantidade_exemplares</code>: inteiro maior que zero.</li>
+            <li><code>sinopse, capa, editora</code> (opcional): textos.</li>
+            <li><code>isbn</code> (opcional): exatamente 13 dígitos.</li>
+            <li><code>ano_publicacao, numero_paginas</code> (opcional): inteiros maiores que zero.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Exige usuário administrador (senão 403).</li>
+            <li>titulo (até 200), autor (até 150) e genero (até 80 caracteres): obrigatórios, não vazios nem só espaços.</li>
+            <li>sinopse, capa (até 255) e editora (até 150): opcionais; precisam ser texto, e vazio vira null.</li>
+            <li><code>isbn</code>: opcional; exatamente 13 dígitos numéricos e único entre os livros (409).</li>
+            <li><code>ano_publicacao e numero_paginas</code>: opcionais; inteiros maiores que zero.</li>
+            <li><code>quantidade_exemplares</code>: obrigatório, inteiro maior que zero.</li>
+            <li>exemplares_disponiveis começa igual à quantidade total; data_cadastro é automática.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Livro cadastrado.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">403</span> Não é administrador.</li>
+            <li><span class="etiqueta">409</span> ISBN já cadastrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/livro/:id</span>
+          </div>
+          <h3>Editar livro</h3>
+          <p>Substitui os dados do livro (mesmos campos do cadastro). Ao mudar a quantidade, os disponíveis são recalculados.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Somente administrador</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do livro.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>titulo, autor, genero e quantidade_exemplares</code>: obrigatórios, como no cadastro.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Exige usuário administrador (senão 403).</li>
+            <li>O livro deve existir (404).</li>
+            <li>Substitui o cadastro inteiro: os campos seguem as regras do cadastro, e um campo opcional omitido é apagado (vira null).</li>
+            <li>A diferença entre a nova e a antiga quantidade é somada aos disponíveis; se o resultado ficar negativo, a edição é recusada (409).</li>
+            <li>O isbn não pode pertencer a outro livro (409).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Livro atualizado.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+            <li><span class="etiqueta">409</span> Quantidade menor que o total emprestado, ou ISBN repetido.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/livro/:id</span>
+          </div>
+          <h3>Excluir livro</h3>
+          <p>Remove o livro, se não houver registros ligados a ele.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Somente administrador</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do livro.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Exige usuário administrador (senão 403).</li>
+            <li>O livro deve existir (404).</li>
+            <li>Bloqueado se houver empréstimos, resenhas, favoritos ou itens de estante do livro (409).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Livro excluído.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+            <li><span class="etiqueta">409</span> Existem registros relacionados.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="emprestimos" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-arrow-left-right"></i>Empréstimos</h2>
+      <p class="texto-suave">Fluxo: o usuário solicita (<code>pendente</code>) e o administrador aprova ou recusa. O livro aprovado perde um exemplar disponível até ser devolvido. Status: <code>pendente</code>, <code>aprovado</code>, <code>recusado</code>, <code>cancelado</code>, <code>devolvido</code>.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/emprestimo</span>
+          </div>
+          <h3>Listar empréstimos</h3>
+          <p>Administrador vê todos; usuário comum vê só os seus.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Administrador recebe os empréstimos de todos; usuário comum, só os seus.</li>
+            <li>Ordenados do mais recente ao mais antigo (data da solicitação).</li>
+            <li>Cada item traz nome_usuario e titulo_livro.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de empréstimos, com nome do usuário e título do livro.</li>
+            <li><span class="etiqueta">401</span> Sem token.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/emprestimo/:id</span>
+          </div>
+          <h3>Consultar empréstimo por ID</h3>
+          <p>Retorna um empréstimo. Só o dono ou um administrador.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do empréstimo.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>O empréstimo deve existir (404).</li>
+            <li>Só o dono ou um administrador pode consultar (senão 403).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Empréstimo encontrado.</li>
+            <li><span class="etiqueta">403</span> Sem permissão.</li>
+            <li><span class="etiqueta">404</span> Empréstimo não encontrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/emprestimo</span>
+          </div>
+          <h3>Solicitar empréstimo</h3>
+          <p>Cria uma solicitação pendente em nome do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>id_livro</code>: ID do livro.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>id_livro</code>: inteiro maior que zero; o livro deve existir (404).</li>
+            <li>O empréstimo é sempre do usuário logado.</li>
+            <li>Não pode haver solicitação pendente do mesmo livro para o mesmo usuário (409).</li>
+            <li>Não pode haver empréstimo aprovado (ainda não devolvido) do mesmo livro para o mesmo usuário (409).</li>
+            <li>Nasce com status pendente; a disponibilidade de exemplares só é verificada na aprovação.</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;id_livro&quot;: 1
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Solicitação registrada.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+            <li><span class="etiqueta">409</span> Já existe solicitação pendente ou empréstimo ativo deste livro.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/emprestimo/:id</span>
+          </div>
+          <h3>Alterar status</h3>
+          <p>Cancelar: só o dono e só se estiver pendente. Aprovar e recusar: administrador, só se pendente. Devolver: administrador, só se aprovado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do empréstimo.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>status</code>: <code>aprovado</code>, <code>recusado</code>, <code>cancelado</code> ou <code>devolvido</code>.</li>
+            <li><code>data_prevista_devolucao</code> (opcional): AAAA-MM-DD, obrigatória ao aprovar e não pode ser anterior a hoje.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>status</code>: um de aprovado, recusado, cancelado ou devolvido; outro valor gera 400.</li>
+            <li>O empréstimo deve existir (404).</li>
+            <li><code>cancelado</code>: só o dono do empréstimo e só se estiver pendente (senão 403).</li>
+            <li><code>aprovado, recusado e devolvido</code>: só administrador (senão 403).</li>
+            <li><code>aprovado</code>: só se estiver pendente (409); exige data_prevista_devolucao em AAAA-MM-DD, data real do calendário e não anterior a hoje (400); precisa haver exemplar disponível (409). Registra data_emprestimo como hoje e reduz um exemplar disponível.</li>
+            <li><code>recusado</code>: só se estiver pendente (409).</li>
+            <li><code>devolvido</code>: só se estiver aprovado (409). Registra data_devolucao como hoje e devolve um exemplar ao acervo.</li>
+            <li>A operação é feita em transação: se algo falhar, nada é alterado.</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;status&quot;: &quot;aprovado&quot;,
+  &quot;data_prevista_devolucao&quot;: &quot;2026-12-01&quot;
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Status atualizado.</li>
+            <li><span class="etiqueta">400</span> Status ou data inválidos.</li>
+            <li><span class="etiqueta">403</span> Sem permissão.</li>
+            <li><span class="etiqueta">404</span> Empréstimo não encontrado.</li>
+            <li><span class="etiqueta">409</span> Status atual não permite a mudança, ou sem exemplares.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="resenhas" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-star"></i>Resenhas</h2>
+      <p class="texto-suave">Avaliações dos livros, com nota de 1 a 5. Cada usuário escreve uma resenha por livro.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/resenha</span>
+          </div>
+          <h3>Listar resenhas</h3>
+          <p>Todas as resenhas, da mais recente à mais antiga.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Ordenadas da mais recente para a mais antiga.</li>
+            <li>Cada item traz os dados do usuário e do livro.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de resenhas.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/resenha/:id</span>
+          </div>
+          <h3>Consultar resenha por ID</h3>
+          <p>Retorna uma resenha com autor e livro.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID da resenha.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>A resenha deve existir (senão 404).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Resenha encontrada.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Resenha não encontrada.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/resenha</span>
+          </div>
+          <h3>Publicar resenha</h3>
+          <p>Cria a resenha do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>id_livro</code>: ID do livro.</li>
+            <li><code>texto</code>: texto da resenha.</li>
+            <li><code>nota</code>: inteiro de 1 a 5.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>id_livro</code>: inteiro maior que zero; o livro deve existir (404).</li>
+            <li><code>texto</code>: obrigatório, não vazio nem só espaços.</li>
+            <li><code>nota</code>: número inteiro de 1 a 5.</li>
+            <li>A resenha é sempre do usuário logado.</li>
+            <li>Cada usuário pode ter apenas uma resenha por livro (409).</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;id_livro&quot;: 3,
+  &quot;texto&quot;: &quot;Gostei muito.&quot;,
+  &quot;nota&quot;: 5
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Resenha cadastrada.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+            <li><span class="etiqueta">409</span> Você já resenhou este livro.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/resenha/:id</span>
+          </div>
+          <h3>Editar resenha</h3>
+          <p>Somente o autor da resenha pode editar.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID da resenha.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>texto</code>: novo texto.</li>
+            <li><code>nota</code>: nova nota (1 a 5).</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>texto e nota</code>: obrigatórios, com as mesmas regras do cadastro.</li>
+            <li>A resenha deve existir (404).</li>
+            <li>Só o autor pode editar; administradores também não (403).</li>
+            <li>Não altera o livro nem o autor.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Resenha atualizada.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">403</span> Não é o autor.</li>
+            <li><span class="etiqueta">404</span> Resenha não encontrada.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/resenha/:id</span>
+          </div>
+          <h3>Excluir resenha</h3>
+          <p>O autor ou um administrador (moderação) pode excluir. Comentários e curtidas da resenha também são removidos.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID da resenha.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>A resenha deve existir (404).</li>
+            <li>Só o autor ou um administrador pode excluir (senão 403).</li>
+            <li>Os comentários e as curtidas da resenha são excluídos junto.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Resenha excluída.</li>
+            <li><span class="etiqueta">403</span> Sem permissão.</li>
+            <li><span class="etiqueta">404</span> Resenha não encontrada.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="comentarios" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-chat-dots"></i>Comentários</h2>
+      <p class="texto-suave">Comentários feitos em resenhas.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/comentario/resenha/:id_resenha</span>
+          </div>
+          <h3>Listar comentários de uma resenha</h3>
+          <p>Retorna os comentários em ordem cronológica.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_resenha</code>: ID da resenha.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Ordenados do mais antigo ao mais novo.</li>
+            <li>Se a resenha não existir ou não tiver comentários, retorna lista vazia.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de comentários.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/comentario</span>
+          </div>
+          <h3>Comentar uma resenha</h3>
+          <p>Cria um comentário do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>id_resenha</code>: ID da resenha.</li>
+            <li><code>texto</code>: texto do comentário.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>id_resenha</code>: inteiro maior que zero; a resenha deve existir (404).</li>
+            <li><code>texto</code>: obrigatório, não vazio nem só espaços.</li>
+            <li>O comentário é sempre do usuário logado.</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;id_resenha&quot;: 1,
+  &quot;texto&quot;: &quot;Concordo!&quot;
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Comentário cadastrado.</li>
+            <li><span class="etiqueta">400</span> Dado inválido.</li>
+            <li><span class="etiqueta">404</span> Resenha não encontrada.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/comentario/:id</span>
+          </div>
+          <h3>Editar comentário</h3>
+          <p>Somente o autor.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do comentário.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>texto</code>: novo texto.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>texto</code>: obrigatório, não vazio nem só espaços.</li>
+            <li>O comentário deve existir (404).</li>
+            <li>Só o autor pode editar (403).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Comentário atualizado.</li>
+            <li><span class="etiqueta">403</span> Não é o autor.</li>
+            <li><span class="etiqueta">404</span> Comentário não encontrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/comentario/:id</span>
+          </div>
+          <h3>Excluir comentário</h3>
+          <p>O autor ou um administrador.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do comentário.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>O comentário deve existir (404).</li>
+            <li>Só o autor ou um administrador pode excluir (403).</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Comentário excluído.</li>
+            <li><span class="etiqueta">403</span> Sem permissão.</li>
+            <li><span class="etiqueta">404</span> Comentário não encontrado.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="curtidas" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-heart"></i>Curtidas</h2>
+      <p class="texto-suave">Curtidas em resenhas. Cada usuário curte uma resenha uma única vez.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/curtida/resenha/:id_resenha</span>
+          </div>
+          <h3>Listar curtidas de uma resenha</h3>
+          <p>Retorna <code>quantidade</code> e os usuários que curtiram.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_resenha</code>: ID da resenha.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Ordenadas da mais antiga para a mais recente.</li>
+            <li>Se a resenha não existir ou não tiver curtidas, retorna quantidade 0.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Quantidade e usuários.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/curtida/:id_resenha</span>
+          </div>
+          <h3>Curtir resenha</h3>
+          <p>Registra a curtida do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_resenha</code>: ID da resenha.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>A resenha deve existir (404).</li>
+            <li>Cada usuário curte uma resenha uma única vez (409).</li>
+            <li>A curtida é sempre do usuário logado.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Resenha curtida.</li>
+            <li><span class="etiqueta">404</span> Resenha não encontrada.</li>
+            <li><span class="etiqueta">409</span> Você já curtiu esta resenha.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/curtida/:id_resenha</span>
+          </div>
+          <h3>Remover curtida</h3>
+          <p>Remove a curtida do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_resenha</code>: ID da resenha.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Só remove a curtida do próprio usuário logado.</li>
+            <li>Se o usuário não curtiu a resenha, retorna 404.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Curtida removida.</li>
+            <li><span class="etiqueta">404</span> Você não curtiu esta resenha.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <section id="favoritos" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-bookmark-heart"></i>Favoritos</h2>
+      <p class="texto-suave">Todas as rotas exigem token. Cada usuário gerencia somente os próprios favoritos.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/favorito/livro/:id_livro</span>
+          </div>
+          <h3>Quem favoritou um livro</h3>
+          <p>Retorna <code>quantidade</code> e a lista de usuários.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_livro</code>: ID do livro.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>O livro deve existir (404).</li>
+            <li>Ordenado pelo nome do usuário; retorna só ID e nome.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Usuários encontrados.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/favorito/usuario/:id_usuario</span>
+          </div>
+          <h3>Favoritos de um usuário</h3>
+          <p>Retorna os livros favoritos. O ID deve ser o do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_usuario</code>: ID do usuário.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>O ID deve ser o do usuário logado (senão 403).</li>
+            <li>Ordenados pelo título do livro.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Favoritos encontrados.</li>
+            <li><span class="etiqueta">403</span> O ID não é o seu.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/favorito</span>
+          </div>
+          <h3>Favoritar livro</h3>
+          <p>Adiciona o livro aos favoritos do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>id_livro</code>: ID do livro.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li><code>id_livro</code>: inteiro maior que zero; o livro deve existir (404).</li>
+            <li><code>id_usuario</code>: não é necessário; se enviado, deve ser inteiro maior que zero e igual ao do usuário logado (403).</li>
+            <li>O mesmo livro não pode ser favoritado duas vezes (409).</li>
+          </ul>
+          <h4>Exemplo</h4>
+          <pre class="codigo-json">{
+  &quot;id_livro&quot;: 2
+}</pre>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Livro favoritado.</li>
+            <li><span class="etiqueta">404</span> Livro não encontrado.</li>
+            <li><span class="etiqueta">409</span> Já está nos favoritos.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/favorito/:id_usuario/:id_livro</span>
+          </div>
+          <h3>Remover favorito</h3>
+          <p>O <code>id_usuario</code> deve ser o do usuário logado.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_usuario</code>: ID do usuário.</li>
+            <li><code>id_livro</code>: ID do livro.</li>
+          </ul>
+          <h4>Corpo da requisição</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>O id_usuario deve ser o do usuário logado (403).</li>
+            <li>O livro deve existir (404).</li>
+            <li>O livro precisa estar nos favoritos do usuário (404).</li>
+            <li>Remove só o favorito; o livro permanece.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Favorito removido.</li>
+            <li><span class="etiqueta">403</span> O ID não é o seu.</li>
+            <li><span class="etiqueta">404</span> Livro não está nos favoritos.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+    <!-- ESTANTE -->
+    <section id="estante" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-bookshelf"></i>Estante Virtual</h2>
+      <p class="texto-suave">Permite associar livros aos usuários, consultar suas leituras, alterar categorias e remover livros da estante. As categorias disponíveis são <code>quero_ler</code>, <code>lendo</code> e <code>ja_li</code>. Todas as rotas exigem token, e o <code>:id_usuario</code> deve ser o do usuário logado (caso contrário, <code>403</code>).</p>
+      <div class="row g-4">
+
+        <!-- GET -->
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/estante/:id_usuario</span>
+          </div>
+          <h3>Consultar estante de um usuário</h3>
+          <p>Retorna os livros de um usuário, organizados pelas três categorias de leitura.</p>
+          <hr>
+          <h4>Parâmetros da URL</h4>
+          <ul><li><code>id_usuario</code>: ID do usuário cuja estante será consultada.</li></ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>O usuário deve estar cadastrado.</li>
+            <li>Uma estante vazia pode ser retornada com listas vazias.</li>
+            <li>Exige token e o <code>id_usuario</code> deve ser o do usuário logado (senão 403).</li>
+            <li>Os livros vêm ordenados pelo título, divididos em <code>quero_ler</code>, <code>lendo</code> e <code>ja_li</code>.</li>
+            <li>Chamar <code>GET /estante</code> sem informar o ID retorna 400.</li>
+          </ul>
+          <h4>Exemplo de requisição</h4>
+          <pre class="codigo-json">GET /estante/2</pre>
+          <h4>Exemplo de resposta com dados iniciais <span class="etiqueta">200 OK</span></h4>
+          <pre class="codigo-json">{
+  "msg": "Estantes encontradas com sucesso!",
+  "usuario": "Grazi Tonelli",
+  "estantes": {
+    "quero_ler": [
+      {
+        "id_livro": 3,
+        "titulo": "Memórias Póstumas de Brás Cubas",
+        "autor": "Machado de Assis",
+        "genero": "Romance",
+        "categoria": "quero_ler",
+        "data_adicao": "&lt;data e hora geradas pelo banco&gt;"
+      }
+    ],
+    "lendo": [],
+    "ja_li": [
+      {
+        "id_livro": 1,
+        "titulo": "Dom Casmurro",
+        "autor": "Machado de Assis",
+        "genero": "Romance",
+        "categoria": "ja_li",
+        "data_adicao": "&lt;data e hora geradas pelo banco&gt;"
+      }
+    ]
+  }
+}</pre>
+          <p class="small texto-suave mt-3 mb-0">Exemplo baseado nas duas associações inicialmente cadastradas para Grazi Tonelli (ID 2). As datas serão as existentes no seu banco.</p>
+        </article></div>
+
+        <!-- POST -->
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/estante</span>
+          </div>
+          <h3>Adicionar livro à estante</h3>
+          <p>Cria uma associação entre um usuário e um livro, definindo a categoria da leitura.</p>
+          <hr>
+          <h4>Parâmetros obrigatórios no corpo</h4>
+          <ul>
+            <li><code>id_livro</code>: identificador do livro.</li>
+            <li><code>categoria</code>: categoria de leitura.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID do livro deve ser um número inteiro maior que zero. O usuário é o dono do token.</li>
+            <li>O usuário e o livro devem existir.</li>
+            <li>A categoria deve ser <code>quero_ler</code>, <code>lendo</code> ou <code>ja_li</code>.</li>
+            <li>O mesmo livro não pode ser adicionado duas vezes à estante do mesmo usuário.</li>
+            <li>Exige token; a estante é sempre a do usuário logado.</li>
+            <li><code>id_livro</code> e <code>categoria</code> são obrigatórios no corpo; a categoria diferencia maiúsculas de minúsculas.</li>
+          </ul>
+          <h4>Exemplo de requisição</h4>
+          <pre class="codigo-json">POST /estante
+
+{
+  "id_livro": 4,
+  "categoria": "quero_ler"
+}</pre>
+          <h4>Exemplo de sucesso usando usuário e livro cadastrados <span class="etiqueta">201 Criado</span></h4>
+          <pre class="codigo-json">{
+  "msg": "Livro adicionado à estante com sucesso!",
+  "data": {
+    "id_usuario": 3,
+    "id_livro": 4,
+    "categoria": "quero_ler",
+    "data_adicao": "&lt;data e hora geradas pelo banco&gt;"
+  }
+}</pre>
+          <h4>Exemplo de tentativa de associação duplicada <span class="etiqueta">409 Conflito</span></h4>
+          <p>Esta associação <strong>já existe nos dados iniciais</strong>: Grazi Tonelli (ID 2, logada) e Dom Casmurro (ID 1).</p>
+          <pre class="codigo-json">{
+  "id_livro": 1,
+  "categoria": "ja_li"
+}</pre>
+          <pre class="codigo-json">{
+  "msg": "Este livro já está na estante do usuário!"
+}</pre>
+          <p class="small texto-suave mt-3 mb-0">Sophia Silva (ID 3) e A Moreninha (ID 4) já constam no SQL inicial; a associação entre eles ainda não consta nos INSERTs iniciais. Executar esse POST cria um novo registro.</p>
+        </article></div>
+
+        <!-- PUT -->
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo put">PUT</span><span class="rota">/estante/:id_usuario/:id_livro</span>
+          </div>
+          <h3>Alterar categoria de um livro</h3>
+          <p>Atualiza a categoria de um livro que já pertence à estante do usuário.</p>
+          <hr>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_usuario</code>: ID do usuário.</li>
+            <li><code>id_livro</code>: ID do livro.</li>
+          </ul>
+          <h4>Parâmetro obrigatório no corpo</h4>
+          <ul><li><code>categoria</code>: nova categoria da leitura.</li></ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Os IDs devem ser números inteiros maiores que zero.</li>
+            <li>O usuário e o livro devem existir.</li>
+            <li>O livro deve estar associado à estante desse usuário.</li>
+            <li>A categoria deve ser <code>quero_ler</code>, <code>lendo</code> ou <code>ja_li</code>.</li>
+            <li>A operação não altera o cadastro original do livro.</li>
+            <li>Exige token e o <code>id_usuario</code> da URL deve ser o do usuário logado (senão 403).</li>
+            <li><code>categoria</code> é obrigatória no corpo.</li>
+          </ul>
+          <h4>Exemplo de requisição</h4>
+          <pre class="codigo-json">PUT /estante/4/5
+
+{
+  "categoria": "ja_li"
+}</pre>
+          <h4>Exemplo de sucesso partindo de uma associação existente <span class="etiqueta">200 OK</span></h4>
+          <pre class="codigo-json">{
+  "msg": "Categoria atualizada com sucesso!",
+  "data": {
+    "id_usuario": 4,
+    "id_livro": 5,
+    "categoria": "ja_li",
+    "data_adicao": "&lt;data e hora geradas pelo banco&gt;"
+  }
+}</pre>
+          <p class="small texto-suave mt-3 mb-0">No SQL inicial, Guilherme Batista (ID 4) tem O Alienista (ID 5) em <code>lendo</code>. Esse exemplo altera a categoria para <code>ja_li</code>.</p>
+        </article></div>
+
+        <!-- DELETE -->
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo delete">DELETE</span><span class="rota">/estante/:id_usuario/:id_livro</span>
+          </div>
+          <h3>Remover livro da estante</h3>
+          <p>Desfaz a associação entre um usuário e um livro, sem excluir o livro da biblioteca.</p>
+          <hr>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id_usuario</code>: ID do usuário.</li>
+            <li><code>id_livro</code>: ID do livro a remover.</li>
+          </ul>
+          <h4>Parâmetros no corpo</h4>
+          <p>Não possui.</p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Os IDs devem ser números inteiros maiores que zero.</li>
+            <li>O livro deve estar associado à estante informada.</li>
+            <li>Somente a associação é removida; o registro da tabela <code>livro</code> permanece.</li>
+            <li>Exige token e o <code>id_usuario</code> da URL deve ser o do usuário logado (senão 403).</li>
+          </ul>
+          <h4>Exemplo de requisição</h4>
+          <pre class="codigo-json">DELETE /estante/5/1</pre>
+          <h4>Exemplo de sucesso com associação existente <span class="etiqueta">200 OK</span></h4>
+          <pre class="codigo-json">{
+  "msg": "Livro removido da estante com sucesso!",
+  "data": {
+    "id_usuario": 5,
+    "id_livro": 1,
+    "categoria": "quero_ler",
+    "data_adicao": "&lt;data e hora geradas pelo banco&gt;"
+  }
+}</pre>
+          <p class="small texto-suave mt-3 mb-0">No SQL inicial, Ester Piscioneri (ID 5) possui Dom Casmurro (ID 1) em <code>quero_ler</code>. Esse DELETE remove somente a associação.</p>
+        </article></div>
+      </div>
+    </section>
+
+    <section id="arquivos" class="mb-5">
+      <h2 class="titulo"><i class="bi bi-image"></i>Arquivos (imagens)</h2>
+      <p class="texto-suave">Upload de fotos de perfil e capas. O arquivo é guardado no banco; use o <code>id_arquivo</code> retornado em <code>id_foto_perfil</code> do usuário.</p>
+      <div class="row g-4">
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo post">POST</span><span class="rota">/arquivos</span>
+          </div>
+          <h3>Enviar imagem</h3>
+          <p>Envio <code>multipart/form-data</code>, com a imagem no campo <code>arquivo</code>. Aceita JPEG, PNG, WEBP e GIF de até 5 MB (o conteúdo real é verificado).</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Requer token</span></p>
+          <h4>Corpo da requisição</h4>
+          <ul>
+            <li><code>arquivo</code>: arquivo de imagem.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Exige token válido e não expirado; o usuário do token precisa existir (senão 401).</li>
+            <li>Enviar como multipart/form-data, com um único arquivo no campo chamado arquivo (outro campo ou mais de um arquivo gera 400).</li>
+            <li>Tamanho máximo de 5 MB (413).</li>
+            <li>Tipos aceitos: image/jpeg, image/png, image/webp e image/gif.</li>
+            <li>O tipo informado precisa coincidir com o conteúdo real do arquivo; arquivos disfarçados, SVG, HTML etc. recebem 415.</li>
+            <li>O nome original é guardado com até 255 caracteres.</li>
+            <li>Não existe rota para excluir arquivos.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">201</span> Arquivo salvo, com <code>id_arquivo</code>.</li>
+            <li><span class="etiqueta">400</span> Nenhum arquivo ou campo errado.</li>
+            <li><span class="etiqueta">413</span> Maior que 5 MB.</li>
+            <li><span class="etiqueta">415</span> Tipo não permitido.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/arquivos</span>
+          </div>
+          <h3>Listar arquivos</h3>
+          <p>Lista apenas os metadados (sem o conteúdo).</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Restrições</h4>
+          <ul>
+            <li>Retorna só id, nome, tipo, tamanho e data, sem o conteúdo.</li>
+            <li>Ordenados pelo ID.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Lista de arquivos.</li>
+          </ul>
+        </article></div>
+
+        <div class="col-lg-6"><article class="route-card">
+          <div class="d-flex flex-wrap justify-content-between gap-2 align-items-center">
+            <span class="metodo get">GET</span><span class="rota">/arquivos/:id</span>
+          </div>
+          <h3>Exibir imagem</h3>
+          <p>Devolve a imagem, para uso direto em <code>&lt;img src&gt;</code>.</p>
+          <hr>
+          <h4>Acesso</h4>
+          <p><span class="pill-status">Pública</span></p>
+          <h4>Parâmetros da URL</h4>
+          <ul>
+            <li><code>id</code>: ID do arquivo.</li>
+          </ul>
+          <h4>Restrições</h4>
+          <ul>
+            <li>O ID deve ser um número inteiro maior que zero.</li>
+            <li>O arquivo deve existir (404).</li>
+            <li>É pública para funcionar em &lt;img src&gt;, que não envia token.</li>
+            <li>A imagem é exibida no navegador com o tipo original.</li>
+          </ul>
+          <h4>Respostas</h4>
+          <ul>
+            <li><span class="etiqueta">200</span> Imagem.</li>
+            <li><span class="etiqueta">400</span> ID inválido.</li>
+            <li><span class="etiqueta">404</span> Arquivo não encontrado.</li>
+          </ul>
+        </article></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <i class="bi bi-book-half fs-3"></i>
+      <div class="fw-bold mt-2">Livramente</div>
+      <div>Documentação da API RESTful • Todos os módulos</div>
+    </div>
+  </footer>
+
+  <button id="voltarTopo" aria-label="Voltar ao topo" title="Voltar ao topo"><i class="bi bi-arrow-up"></i></button>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const botaoTopo = document.getElementById("voltarTopo");
+    window.addEventListener("scroll", () => {
+      botaoTopo.style.display = window.scrollY > 300 ? "block" : "none";
+    });
+    botaoTopo.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
